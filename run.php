@@ -5,9 +5,9 @@ namespace ParserGenerator;
 require __DIR__.'/autoload.php';
 
 
-$input = 'rule = { thing }; thing = "a" | "b" | "c";';
+$input = 'rule =  thing | "test";';
 
 $parser = new Parser();
 $output = $parser->parse($input);
 
-echo $output;
+echo "Output: $output\n";
