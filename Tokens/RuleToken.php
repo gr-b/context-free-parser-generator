@@ -9,7 +9,7 @@ namespace ParserGenerator\Tokens;
 
 class RuleToken
 {
-    /** @var $string ruleName */
+    /** @var string $ruleName */
     private $ruleName;
 
     /** @var Token $expression */
@@ -24,5 +24,10 @@ class RuleToken
     public function __toString()
     {
         return $this->ruleName." = ".$this->expression->__toString(). ";\n";
+    }
+
+    public function getName()
+    {
+        return $this->ruleName;
     }
 }

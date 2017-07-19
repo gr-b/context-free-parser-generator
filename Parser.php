@@ -8,10 +8,11 @@ use ParserGenerator\Tokens\OrToken;
 use ParserGenerator\Tokens\CommaToken;
 use ParserGenerator\Tokens\IdentifierToken;
 use ParserGenerator\Tokens\TerminalToken;
+use ParserGenerator\Tokens\TokenToken;
 use ParserGenerator\Tokens\OptionalToken;
 use ParserGenerator\Tokens\RepetitionToken;
 use ParserGenerator\Tokens\GroupingToken;
-use ParserGenerator\Tokens\TokenToken;
+
 use Exception;
 
 /**

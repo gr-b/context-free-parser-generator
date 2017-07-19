@@ -2,7 +2,7 @@
 
 spl_autoload_register(
     function ($class) {
-        $namespacePrefix = 'ParserGenerator\\';
+        $namespacePrefix = '{{ projectName }}\\';
         $namespacePrefixLength = strlen($namespacePrefix);
 
         if (strncmp($class, $namespacePrefix, $namespacePrefixLength) !== 0) {
@@ -10,8 +10,9 @@ spl_autoload_register(
         }
 
         $relativeClassName = substr($class, $namespacePrefixLength);
-        $filePath = dirname(dirname(__DIR__)) . '/Projects/parser-generator/' . strtr($relativeClassName, '\\', '/') . '.php';
-        //echo "Filepath:".$filePath."\n";
+        // __DIR__ will give '~/.../output/'
+        $filePath = __DIR__ . '/{{ projectName }}/' . strtr($relativeClassName, '\\', '/') . '.php';
+
         if (is_file($filePath)) {
             include $filePath;
         }

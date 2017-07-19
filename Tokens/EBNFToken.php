@@ -26,4 +26,9 @@ class EBNFToken
 
         return $EBNF;
     }
+
+    public function getRules()
+    {
+        return $this->rules;
+    }
 }

@@ -59,7 +59,7 @@ use Exception;
  *
  */
 
-class Parser
+class ParserTemplate
 {
     /** @var string */
     private $input;
