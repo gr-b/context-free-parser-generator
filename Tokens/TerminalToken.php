@@ -23,6 +23,7 @@ class TerminalToken extends Token
         return '"'.$this->terminal.'"';
     }
 
+    // Produces array() for discoverClassRuleT
     public function map($function, $combiner)
     {
         return $combiner(array(

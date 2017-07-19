@@ -13,7 +13,7 @@ sum = @expression, "+", @expression;
 variable = "x" | "y" | "z" | "a" | "b" | "c";
 EOS;
 
-$input = 'algebra = @test;';
+$input = '@algebra = test;';
 
 // Abstract Syntax Tree
 $parser = new Parser();

@@ -47,7 +47,7 @@ class Compiler
         $this->generator = new Generator($projectName);
         //$this->generator->generateAutoloader();
 
-        $TokenTokens = $this->discoverTokenTokens($ast);
+        $TokenTokens = $this->discoverClassRuleTokens($ast);
     }
 
     /**
@@ -69,7 +69,7 @@ class Compiler
      * @param Token $token
      * @return Token[]
      */
-    private function discoverTokenTokens(Token $token)
+    private function discoverClassRuleTokens(Token $token)
     {
         $type = $token->getType();
 
@@ -116,7 +116,7 @@ class Compiler
                 /** @var TerminalToken $token */
                 return array();
 
-            case Token::TYPE_TOKEN_CLASS:
+            case Token::TYPE_CLASS_RULE:
                 /** @var ClassRuleToken $token */
                 return array($token);
 

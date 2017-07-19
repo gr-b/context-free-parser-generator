@@ -149,10 +149,7 @@ class Parser
         }
 
 
-        $output = ($isClassRuleToken ?
-            new ClassRuleToken($ruleName, $expression) :
-            new RuleToken($ruleName, $expression)
-        );
+        $output = new RuleToken($ruleName, $expression, $isClassRuleToken);
         return true;
     }
 
