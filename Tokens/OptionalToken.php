@@ -4,6 +4,7 @@ namespace ParserGenerator\Tokens;
 
 /**
  * Class OptionalToken
+ * @author Griffin Bishop <grbishop@wpi.edu>
  */
 
 class OptionalToken extends Token

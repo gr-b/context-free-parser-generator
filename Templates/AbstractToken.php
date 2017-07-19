@@ -1,7 +1,11 @@
 <?php
 
-namespace ParserGenerator\Tokens;
+namespace Template\Tokens;
 
+/**
+ * Class Token
+ * @author Griffin Bishop <grbishop@wpi.edu>
+ */
 abstract class Token
 {
     const TYPE_COMMA = 1;

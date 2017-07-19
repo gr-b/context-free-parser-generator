@@ -4,6 +4,7 @@ namespace ParserGenerator\Tokens;
 
 /**
  * Class GroupingToken
+ * @author Griffin Bishop <grbishop@wpi.edu>
  */
 
 class GroupingToken extends Token

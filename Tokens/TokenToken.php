@@ -4,6 +4,7 @@ namespace ParserGenerator\Tokens;
 
 /**
  * Class ClassToken
+ * @author Griffin Bishop <grbishop@wpi.edu>
  */
 
 class TokenToken extends Token

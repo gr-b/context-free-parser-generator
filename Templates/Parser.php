@@ -1,6 +1,6 @@
 <?php
 
-namespace ParserGenerator;
+namespace Template;
 
 use ParserGenerator\Tokens\EBNFToken;
 use ParserGenerator\Tokens\RuleToken;

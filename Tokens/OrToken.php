@@ -4,6 +4,7 @@ namespace ParserGenerator\Tokens;
 
 /**
  * Class OrToken
+ * @author Griffin Bishop <grbishop@wpi.edu>
  */
 
 class OrToken extends Token

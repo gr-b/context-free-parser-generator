@@ -4,6 +4,7 @@ namespace ParserGenerator\Tokens;
 
 /**
  * Class RuleToken
+ * @author Griffin Bishop <grbishop@wpi.edu>
  */
 
 class RuleToken

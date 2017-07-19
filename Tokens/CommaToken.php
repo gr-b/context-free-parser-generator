@@ -4,6 +4,7 @@ namespace ParserGenerator\Tokens;
 
 /**
  * Class CommaToken
+ * @author Griffin Bishop <grbishop@wpi.edu>
  */
 
 class CommaToken extends Token

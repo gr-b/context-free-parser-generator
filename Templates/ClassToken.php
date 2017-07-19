@@ -1,12 +1,13 @@
 <?php
 
-namespace ParserGenerator\Tokens;
+namespace Template\Tokens;
 
 /**
  * Class GroupingToken
+ * @author Griffin Bishop <grbishop@wpi.edu>
  */
 
-class GroupingToken extends Token
+class ClassToken extends Token
 {
     /** @var $expression Token */
     private $expression;

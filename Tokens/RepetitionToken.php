@@ -4,6 +4,7 @@ namespace ParserGenerator\Tokens;
 
 /**
  * Class RepetitionToken
+ * @author Griffin Bishop <grbishop@wpi.edu>
  */
 
 class RepetitionToken extends Token

@@ -10,56 +10,17 @@ use ParserGenerator\Tokens\IdentifierToken;
 use ParserGenerator\Tokens\TerminalToken;
 use ParserGenerator\Tokens\OptionalToken;
 use ParserGenerator\Tokens\RepetitionToken;
-use ParserGenerator\Tokens\GroupingToken;
+use ParserGenerator\Tokens\ClassToken;
 use ParserGenerator\Tokens\TokenToken;
 use Exception;
 
 /**
- * Class Parser
+ * Class Compiler
  * @author Griffin Bishop <grbishop@wpi.edu>
  * @package ParserGenerator
- *
- * ebnf = { rule } ;
- *
- * rule = lhs , "=" , rhs , ";" ;
- *
- * lhs = identifier ;
- * rhs = identifier
- * | terminal
- * | token
- * | "[" , rhs , "]"
- * | "{" , rhs , "}"
- * | "(" , rhs , ")"
- * | rhs , "|" , rhs
- * | rhs , "," , rhs ;
- *
- * identifier = letter , { letter | digit | "_" } ;
- *
- * terminal = "'" , character , { character } , "'"
- * | '"' , character , { character } , '"' ;
- *
- * token = "@" , identifier;
- *
- * letter = "A" | "B" | "C" | "D" | "E" | "F" | "G"
- * | "H" | "I" | "J" | "K" | "L" | "M" | "N"
- * | "O" | "P" | "Q" | "R" | "S" | "T" | "U"
- * | "V" | "W" | "X" | "Y" | "Z" | "a" | "b"
- * | "c" | "d" | "e" | "f" | "g" | "h" | "i"
- * | "j" | "k" | "l" | "m" | "n" | "o" | "p"
- * | "q" | "r" | "s" | "t" | "u" | "v" | "w"
- * | "x" | "y" | "z" ;
- *
- * digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
- *
- * symbol = "[" | "]" | "{" | "}" | "(" | ")" | "<" | ">"
- * | "'" | '"' | "=" | "|" | "." | "," | ";" ;
- *
- * character = letter | digit | symbol | "_" ;
- *
- *
  */
 
-class Parser
+class Compiler
 {
     /** @var string */
     private $input;
@@ -258,7 +219,7 @@ class Parser
                 $this->syntaxError('\')\'', 'expression \''.$expression.'\'');
             }
 
-            $output = new GroupingToken($expression);
+            $output = new ClassToken($expression);
             return true;
         }
 

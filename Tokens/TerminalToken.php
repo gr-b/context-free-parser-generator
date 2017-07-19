@@ -4,6 +4,7 @@ namespace ParserGenerator\Tokens;
 
 /**
  * Class TerminalToken
+ * @author Griffin Bishop <grbishop@wpi.edu>
  */
 
 class TerminalToken extends Token

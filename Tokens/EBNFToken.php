@@ -4,6 +4,7 @@ namespace ParserGenerator\Tokens;
 
 /**
  * Class EBNFToken
+ * @author Griffin Bishop <grbishop@wpi.edu>
  */
 
 class EBNFToken
