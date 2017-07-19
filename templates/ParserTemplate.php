@@ -11,7 +11,7 @@ use ParserGenerator\Tokens\TerminalToken;
 use ParserGenerator\Tokens\OptionalToken;
 use ParserGenerator\Tokens\RepetitionToken;
 use ParserGenerator\Tokens\GroupingToken;
-use ParserGenerator\Tokens\TokenToken;
+use ParserGenerator\Tokens\ClassRuleToken;
 use Exception;
 
 /**
@@ -152,7 +152,7 @@ class ParserTemplate
             if (!$this->getIdentifier($tokenIdentifier)) {
                 $this->syntaxError('identifier', '\'@\'');
             }
-            $output = new TokenToken($tokenIdentifier);
+            $output = new ClassRuleToken($tokenIdentifier);
             return true;
         }
         return false;

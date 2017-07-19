@@ -7,13 +7,14 @@ namespace ParserGenerator\Tokens;
  * @author Griffin Bishop <grbishop@wpi.edu>
  */
 
-class EBNFToken
+class EBNFToken extends Token
 {
     /** @var array $rules - Array(RuleToken) */
     private $rules;
 
     public function __construct(array $rules)
     {
+        parent::__construct(Token::TYPE_EBNF);
         $this->rules = $rules;
     }
 
@@ -30,5 +31,12 @@ class EBNFToken
     public function getRules()
     {
         return $this->rules;
+    }
+
+    public function map($function, $combiner)
+    {
+        $results = array_map(array($this, $function), $this->rules);
+
+        return $combiner($results);
     }
 }

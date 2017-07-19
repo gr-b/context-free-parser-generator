@@ -22,4 +22,11 @@ class TerminalToken extends Token
     {
         return '"'.$this->terminal.'"';
     }
+
+    public function map($function, $combiner)
+    {
+        return $combiner(array(
+            $function())
+        );
+    }
 }

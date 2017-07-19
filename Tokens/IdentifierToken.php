@@ -22,4 +22,11 @@ class IdentifierToken extends Token
     {
         return ''.$this->identifier;
     }
+
+    public function map($function, $combiner)
+    {
+        return $combiner(array(
+                $function())
+        );
+    }
 }

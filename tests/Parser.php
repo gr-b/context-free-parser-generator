@@ -69,3 +69,10 @@ $input = "rule =  thing | \"test\";";
 
 // Output
 $output = "rule = thing | \"test\";\n";
+
+
+// Input
+$input = "@rule = thing;";
+
+// Output
+$output = "@rule = thing;\n";

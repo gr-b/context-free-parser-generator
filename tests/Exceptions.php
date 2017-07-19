@@ -45,7 +45,7 @@ throw new Exception("Expected ';' after expression 'otherRule', got '' instead\n
 $input = "rule = @";
 
 // Output
-throw new Exception("Expected identifier after '@', got '' instead\n");
+throw new Exception("Expected expression after 'rule =', got '@' instead\n");
 
 
 // Input
@@ -116,6 +116,20 @@ $input = "rule = ( expr ";
 
 // Output
 throw new Exception("Expected ')' after expression 'expr', got ' ' instead\n");
+
+
+// Input
+$input = "rule = @expr ";
+
+// Output
+throw new Exception("Expected expression after 'rule =', got '@expr ' instead\n");
+
+
+// Input
+$input = "rule@ = expr;";
+
+// Output
+throw new Exception("Expected ' = ' after rule 'rule', got '@ = expr;' instead\n");
 
 
 

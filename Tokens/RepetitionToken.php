@@ -18,8 +18,20 @@ class RepetitionToken extends Token
         $this->expression = $expression;
     }
 
+    public function getExpression()
+    {
+        return $this->expression;
+    }
+
     public function __toString()
     {
         return "{ ".$this->expression." }";
+    }
+
+    public function map($function, $combiner)
+    {
+        return $combiner(array(
+                $function($this->expression))
+        );
     }
 }

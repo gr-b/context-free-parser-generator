@@ -8,7 +8,7 @@ use ParserGenerator\Tokens\OrToken;
 use ParserGenerator\Tokens\CommaToken;
 use ParserGenerator\Tokens\IdentifierToken;
 use ParserGenerator\Tokens\TerminalToken;
-use ParserGenerator\Tokens\TokenToken;
+use ParserGenerator\Tokens\ClassRuleToken;
 use ParserGenerator\Tokens\OptionalToken;
 use ParserGenerator\Tokens\RepetitionToken;
 use ParserGenerator\Tokens\GroupingToken;
@@ -24,10 +24,9 @@ use Exception;
  *
  * rule = lhs , "=" , rhs , ";" ;
  *
- * lhs = identifier ;
+ * lhs = identifier | classrule ;
  * rhs = identifier
  * | terminal
- * | token
  * | "[" , rhs , "]"
  * | "{" , rhs , "}"
  * | "(" , rhs , ")"
@@ -39,7 +38,7 @@ use Exception;
  * terminal = "'" , character , { character } , "'"
  * | '"' , character , { character } , '"' ;
  *
- * token = "@" , identifier;
+ * classrule = "@" , identifier;
  *
  * letter = "A" | "B" | "C" | "D" | "E" | "F" | "G"
  * | "H" | "I" | "J" | "K" | "L" | "M" | "N"
@@ -127,42 +126,39 @@ class Parser
 
     private function getRule(&$output)
     {
+        $isClassRuleToken = $this->scan("\s*@");
+
         if (!$this->getIdentifier($ruleName)) {
             return false;
         }
 
         if (!$this->scan("\s*=\s*", $equals)) {
-            $this->syntaxError('\' = \'', 'rule \''.$ruleName.'\'');
+            $after = ($isClassRuleToken ? 'class rule \'@' : 'rule \'');
+            $after .= $ruleName.'\'';
+            $this->syntaxError('\' = \'', $after);
         }
 
         if (!$this->getExpression($expression)) {
-            $this->syntaxError("expression", '\''.$ruleName.' =\'');
+            $after = ($isClassRuleToken ? '\'@' : '\'');
+            $after .= $ruleName.' =\'';
+            $this->syntaxError("expression", $after);
         }
 
         if (!$this->scan("\s*;\s*")) {
             $this->syntaxError('\';\'', 'expression \''.$expression.'\'');
         }
 
-        $output = new RuleToken($ruleName, $expression);
-        return true;
-    }
 
-    private function getToken(&$output)
-    {
-        if ($this->scan("\s*@")) {
-            if (!$this->getIdentifier($tokenIdentifier)) {
-                $this->syntaxError('identifier', '\'@\'');
-            }
-            $output = new TokenToken($tokenIdentifier);
-            return true;
-        }
-        return false;
+        $output = ($isClassRuleToken ?
+            new ClassRuleToken($ruleName, $expression) :
+            new RuleToken($ruleName, $expression)
+        );
+        return true;
     }
 
     private function getExpression(&$output)
     {
-        return $this->getToken($output)
-            || $this->getBinaryExpression($output)
+        return $this->getBinaryExpression($output)
             || $this->getTerminal($output)
             || $this->getOptional($output)
             || $this->getRepetition($output)

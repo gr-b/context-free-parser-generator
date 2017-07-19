@@ -22,8 +22,26 @@ class OrToken extends Token
         $this->right = $right;
     }
 
+    public function getLeft()
+    {
+        return $this->left;
+    }
+
+    public function getRight()
+    {
+        return $this->right;
+    }
+
     public function __toString()
     {
         return $this->left." | ".$this->right;
+    }
+
+    public function map($function, $combiner)
+    {
+        return $combiner(array(
+                $function($this->left),
+                $function($this->right))
+        );
     }
 }

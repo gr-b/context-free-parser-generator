@@ -3,11 +3,11 @@
 namespace ParserGenerator\Tokens;
 
 /**
- * Class RuleToken
+ * Class ClassRuleToken
  * @author Griffin Bishop <grbishop@wpi.edu>
  */
 
-class RuleToken extends Token
+class ClassRuleToken extends Token
 {
     /** @var string $ruleName */
     private $ruleName;
@@ -17,14 +17,14 @@ class RuleToken extends Token
 
     public function __construct($ruleName, Token $expression)
     {
-        parent::__construct(Token::TYPE_RULE);
+        parent::__construct(Token::TYPE_CLASS_RULE);
         $this->ruleName = $ruleName;
         $this->expression = $expression;
     }
 
     public function __toString()
     {
-        return $this->ruleName." = ".$this->expression->__toString(). ";\n";
+        return '@'.$this->ruleName." = ".$this->expression->__toString(). ";\n";
     }
 
     public function getName()
