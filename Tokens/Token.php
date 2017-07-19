@@ -15,9 +15,8 @@ abstract class Token
     const TYPE_OPTIONAL = 5;
     const TYPE_REPETITION = 6;
     const TYPE_GROUPING = 7;
-    const TYPE_CLASS_RULE = 8;
-    const TYPE_EBNF = 9;
-    const TYPE_RULE = 10;
+    const TYPE_EBNF = 8;
+    const TYPE_RULE = 9;
 
     /** @var integer */
     private $type;
@@ -45,13 +44,12 @@ abstract class Token
     abstract public function __toString();
 
     /**
-     * Calls the given $function on every Token stored in the current
-     * token.
-     * @param Callable $function
-     * Calls this function on each applicable Token stored in this token.
-     * The function given must take a token.
-     * @param Callable $combiner
-     * $combiner takes an array of whatever $function returns.
+     * Returns an array of Class RuleTokens in this tree
+     *
+     * Performs a depth first search to find TokenTokens.
+     * Returns a list of RuleToken objects where Token->isClass is true.
+     * @return RuleToken[]
+     * These RuleTokens have $isClass = true
      */
-    abstract public function map($function, $combiner);
+    abstract public function collectClassRuleTokens();
 }

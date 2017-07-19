@@ -23,10 +23,13 @@ class IdentifierToken extends Token
         return ''.$this->identifier;
     }
 
-    public function map($function, $combiner)
+    public function getIdentifier()
     {
-        return $combiner(array(
-                $function())
-        );
+        return $this->identifier;
+    }
+
+    public function collectClassRuleTokens()
+    {
+        return array();
     }
 }

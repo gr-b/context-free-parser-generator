@@ -37,11 +37,11 @@ class OrToken extends Token
         return $this->left." | ".$this->right;
     }
 
-    public function map($function, $combiner)
+    public function collectClassRuleTokens()
     {
-        return $combiner(array(
-                $function($this->left),
-                $function($this->right))
+        return array_merge(
+            $this->left->collectClassRuleTokens(),
+            $this->right->collectClassRuleTokens()
         );
     }
 }

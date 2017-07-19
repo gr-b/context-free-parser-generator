@@ -27,12 +27,12 @@ $input = <<< EOS
 equation = variable, " = ", expression, ";";
 expression = sum | variable;
 
-sum = @expression, "+", @expression;
+@sum = expression, "+", expression;
 
 variable = "x" | "y" | "z" | "a" | "b" | "c";
 EOS;
 
-$input = '@rule = test;';
+//$input = '@rule = test;';
 
 $parser = new Parser();
 $output = $parser->parse($input);

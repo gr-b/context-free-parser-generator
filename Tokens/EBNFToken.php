@@ -33,10 +33,13 @@ class EBNFToken extends Token
         return $this->rules;
     }
 
-    public function map($function, $combiner)
+    public function collectClassRuleTokens()
     {
-        $results = array_map(array($this, $function), $this->rules);
+        $results = array();
+        foreach ($this->rules as $rule) {
+            $results = array_merge($results, $rule->collectClassRuleTokens());
+        }
 
-        return $combiner($results);
+        return $results;
     }
 }

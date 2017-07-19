@@ -28,10 +28,8 @@ class OptionalToken extends Token
         return "[ ".$this->expression." ]";
     }
 
-    public function map($function, $combiner)
+    public function collectClassRuleTokens()
     {
-        return $combiner(array(
-                $function($this->expression))
-        );
+        return $this->expression->collectClassRuleTokens();
     }
 }

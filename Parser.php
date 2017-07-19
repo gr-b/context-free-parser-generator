@@ -174,6 +174,8 @@ class Parser
                 $this->syntaxError('expression', '\'|\'');
             }
             //echo "Found $identifier | $rightIdentifier\n";
+            // hack
+            $identifier = (is_string($identifier) ? new IdentifierToken($identifier) : $identifier);
             $output = new OrToken($identifier, $rightIdentifier);
             return true;
         }
@@ -183,6 +185,7 @@ class Parser
                 $this->syntaxError('expression', '\',\'');
             }
             //echo "Found $identifier , $rightIdentifier\n";
+            $identifier = (is_string($identifier) ? new IdentifierToken($identifier) : $identifier);
             $output = new CommaToken($identifier, $rightIdentifier);
             return true;
         }

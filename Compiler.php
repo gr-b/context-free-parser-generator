@@ -47,7 +47,74 @@ class Compiler
         $this->generator = new Generator($projectName);
         //$this->generator->generateAutoloader();
 
-        $TokenTokens = $this->discoverClassRuleTokens($ast);
+        //print_r($ast);
+        //echo "Abstract Syntax Tree: ". self::printToken($ast)."\n";
+        $classTokens = $ast->collectClassRuleTokens();
+        echo self::printTokens($classTokens);
+    }
+
+    /**
+     * @param array $tokens
+     * @return string
+     */
+    public static function printTokens(array $tokens)
+    {
+        $string = "[";
+        foreach ($tokens as $token) {
+            $string .= self::printToken($token).", ";
+        }
+        $string .= "]";
+
+        return $string;
+    }
+
+    public static function printToken(Token $token)
+    {
+        $type = $token->getType();
+
+        switch ($type) {
+            case Token::TYPE_EBNF:
+                /** @var EBNFToken $token */
+                $guts = array_map(array('self', 'printToken'), $token->getRules());
+                $guts = implode(', ', $guts);
+                return "ebnf(".$guts.")";
+
+            case Token::TYPE_RULE:
+                /** @var RuleToken $token */
+                return "rule(".($token->isClass() ? '@' : '') .
+                    $token->getName().", ".self::printToken($token->getExpression()). ";\n)";
+
+            case Token::TYPE_OR:
+                /** @var OrToken $token */
+                return "or(".self::printToken($token->getLeft()).' | '. self::printToken($token->getRight()).")";
+
+            case Token::TYPE_COMMA:
+                /** @var CommaToken $token */
+                return "comma(".self::printToken($token->getLeft()).' , '. self::printToken($token->getRight()).")";
+
+            case Token::TYPE_GROUPING:
+                /** @var GroupingToken $token */
+                return "grouping(".self::printToken($token->getExpression()).")";
+
+            case Token::TYPE_REPETITION:
+                /** @var RepetitionToken $token */
+                return "repetition(".self::printToken($token->getExpression()).")";
+
+            case Token::TYPE_OPTIONAL:
+                /** @var OptionalToken $token */
+                return "optional(".self::printToken($token->getExpression()).")";
+
+            case Token::TYPE_TERMINAL:
+                /** @var TerminalToken $token */
+                return "terminal(\"".$token->getTerminal()."\")";
+
+            case Token::TYPE_IDENTIFIER:
+                /** @var IdentifierToken $token */
+                return "identifier('".$token->getIdentifier()."')";
+
+            default:
+                throw new Exception("Abstract syntax tree is invalid!");
+        }
     }
 
     /**
@@ -61,66 +128,6 @@ class Compiler
     private function computeTokenClasses(Token $ast)
     {
 
-    }
-
-    /**
-     * Performs a depth first search to find TokenTokens.
-     * Returns a list of ClassRuleToken objects.
-     * @param Token $token
-     * @return Token[]
-     */
-    private function discoverClassRuleTokens(Token $token)
-    {
-        $type = $token->getType();
-
-        switch ($type) {
-            case Token::TYPE_EBNF:
-                /** @var EBNFToken $token */
-                return array_map(array($this, 'discoverTokenTokens'), $token->getRules());
-
-            case Token::TYPE_RULE:
-                /** @var RuleToken $token */
-                return $this->discoverTokenTokens($token->getExpression());
-
-            case Token::TYPE_OR:
-                /** @var OrToken $token */
-                return array_merge(
-                    $this->discoverTokenTokens($token->getLeft()),
-                    $this->discoverTokenTokens($token->getRight())
-                );
-
-            case Token::TYPE_COMMA:
-                /** @var CommaToken $token */
-                return array_merge(
-                    $this->discoverTokenTokens($token->getLeft()),
-                    $this->discoverTokenTokens($token->getRight())
-                );
-
-            case Token::TYPE_GROUPING:
-                /** @var GroupingToken $token */
-                return $this->discoverTokenTokens($token->getExpression());
-
-            case Token::TYPE_OPTIONAL:
-                /** @var OptionalToken $token */
-                return $this->discoverTokenTokens($token->getExpression());
-
-            case Token::TYPE_REPETITION:
-                /** @var RepetitionToken $token */
-                return $this->discoverTokenTokens($token->getExpression());
-
-            case Token::TYPE_IDENTIFIER:
-                /** @var IdentifierToken $token */
-                return array();
-
-            case Token::TYPE_TERMINAL:
-                /** @var TerminalToken $token */
-                return array();
-
-            case Token::TYPE_CLASS_RULE:
-                /** @var ClassRuleToken $token */
-                return array($token);
-
-        }
     }
 
     private function getParserName(EBNFToken $ast)

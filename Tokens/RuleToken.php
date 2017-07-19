@@ -15,20 +15,20 @@ class RuleToken extends Token
     /** @var Token $expression */
     private $expression;
 
-    /** @var Bool $isClassRule */
-    private $isClassRule;
+    /** @var Bool $isClass */
+    private $isClass;
 
-    public function __construct($ruleName, Token $expression, $isClassRule = false)
+    public function __construct($ruleName, Token $expression, $isClass = false)
     {
         parent::__construct(Token::TYPE_RULE);
         $this->ruleName = $ruleName;
         $this->expression = $expression;
-        $this->isClassRule = $isClassRule;
+        $this->isClass = $isClass;
     }
 
     public function __toString()
     {
-        return ($this->isClassRule ? '@' : '') .
+        return ($this->isClass ? '@' : '') .
             $this->ruleName." = ".$this->expression->__toString(). ";\n";
     }
 
@@ -42,10 +42,18 @@ class RuleToken extends Token
         return $this->expression;
     }
 
-    public function map($function, $combiner)
+    public function isClass()
     {
-        return $combiner(array(
-                $function($this->expression))
-        );
+        return $this->isClass;
+    }
+
+    public function collectClassRuleTokens()
+    {
+        $tokens  = $this->expression->collectClassRuleTokens();
+
+        if ($this->isClass) {
+            $tokens[] = $this;
+        }
+        return $tokens;
     }
 }
