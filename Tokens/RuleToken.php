@@ -22,6 +22,6 @@ class RuleToken
 
     public function __toString()
     {
-        return $this->ruleName." = ".$this->expression->__toString(). ";";
+        return $this->ruleName." = ".$this->expression->__toString(). ";\n";
     }
 }

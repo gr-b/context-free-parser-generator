@@ -16,56 +16,56 @@ $output = $output->__toString();
 
 
 // Input
-$input = 'rule = test;';
+$input = "rule = test;";
 
 // Output
-$output = 'rule = test;';
+$output = "rule = test;\n";
 
 
 // Input
-$input = 'rule =  thing ; thing = test;';
+$input = "rule =  thing ; thing = test;";
 
 // Output
-$output = 'rule = thing;thing = test;';
+$output = "rule = thing;\nthing = test;\n";
 
 
 // Input
-$input = 'rule =  thing | test;';
+$input = "rule =  thing | test;";
 
 // Output
-$output = 'rule = thing | test;';
+$output = "rule = thing | test;\n";
 
 
 // Input
-$input = 'rule =  thing , test;';
+$input = "rule =  thing , test;";
 
 // Output
-$output = 'rule = thing , test;';
+$output = "rule = thing , test;\n";
 
 
 // Input
-$input = 'rule =  ( thing | test );';
+$input = "rule =  ( thing | test );";
 
 // Output
-$output = 'rule = ( thing | test );';
+$output = "rule = ( thing | test );\n";
 
 
 // Input
-$input = 'rule =  { thing | test };';
+$input = "rule =  { thing | test };";
 
 // Output
-$output = 'rule = { thing | test };';
+$output = "rule = { thing | test };\n";
 
 
 // Input
-$input = 'rule =  thing | "test";';
+$input = "rule =  thing | \"test\";";
 
 // Output
-$output = 'rule = thing | "test";';
+$output = "rule = thing | \"test\";\n";
 
 
 // Input
-$input = 'rule =  thing | "test";';
+$input = "rule =  thing | \"test\";";
 
 // Output
-$output = 'rule = thing | "test";';
+$output = "rule = thing | \"test\";\n";

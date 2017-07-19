@@ -11,21 +11,21 @@ use ParserGenerator\Tokens\TerminalToken;
 use ParserGenerator\Tokens\OptionalToken;
 use ParserGenerator\Tokens\RepetitionToken;
 use ParserGenerator\Tokens\GroupingToken;
+use ParserGenerator\Tokens\TokenToken;
 use Exception;
 
 /**
  * Class Parser
  * @package ParserGenerator
  *
- * ebnf = { grammar }
- *
- * grammar = { rule } ;
+ * ebnf = { rule } ;
  *
  * rule = lhs , "=" , rhs , ";" ;
  *
  * lhs = identifier ;
  * rhs = identifier
  * | terminal
+ * | token
  * | "[" , rhs , "]"
  * | "{" , rhs , "}"
  * | "(" , rhs , ")"
@@ -36,6 +36,8 @@ use Exception;
  *
  * terminal = "'" , character , { character } , "'"
  * | '"' , character , { character } , '"' ;
+ *
+ * token = "@" , identifier;
  *
  * letter = "A" | "B" | "C" | "D" | "E" | "F" | "G"
  * | "H" | "I" | "J" | "K" | "L" | "M" | "N"
@@ -109,6 +111,10 @@ class Parser
             $rules[] = $rule;
         }
 
+        if (empty($rules)) {
+            $this->syntaxError('rule', '\'\'');
+        }
+
         if (!$this->isInputConsumed()) {
             return false;
         }
@@ -124,31 +130,42 @@ class Parser
         }
 
         if (!$this->scan("\s*=\s*", $equals)) {
-            $this->syntaxError('=', 'rule name '.$ruleName);
-            //throw new Exception("Expected '=' after rule name $ruleName, got {$this->state} instead\n");
+            $this->syntaxError('\' = \'', 'rule \''.$ruleName.'\'');
         }
 
         if (!$this->getExpression($expression)) {
-            $this->syntaxError("expression", $ruleName.' =');
-            //throw new Exception("Expected expression after '$ruleName =', got {$this->state} instead \n");
+            $this->syntaxError("expression", '\''.$ruleName.' =\'');
         }
 
         if (!$this->scan("\s*;\s*")) {
-            $this->syntaxError(';', 'expression '.$expression);
-            //throw new Exception("Expected ';' after expression $expression, got {$this->state} instead\n");
+            $this->syntaxError('\';\'', 'expression \''.$expression.'\'');
         }
 
         $output = new RuleToken($ruleName, $expression);
         return true;
     }
 
+    private function getToken(&$output)
+    {
+        if ($this->scan("\s*@")) {
+            if (!$this->getIdentifier($tokenIdentifier)) {
+                $this->syntaxError('identifier', '\'@\'');
+            }
+            $output = new TokenToken($tokenIdentifier);
+            return true;
+        }
+        return false;
+    }
+
     private function getExpression(&$output)
     {
-        return $this->getBinaryExpression($output)
+        return $this->getToken($output)
+            || $this->getBinaryExpression($output)
             || $this->getTerminal($output)
             || $this->getOptional($output)
             || $this->getRepetition($output)
             || $this->getGrouping($output);
+
     }
 
     private function getBinaryExpression(&$output)
@@ -159,8 +176,7 @@ class Parser
 
         if ($this->scan("\s*\|\s*")) {
             if (!$this->getExpression($rightIdentifier)) {
-                $this->syntaxError('expresison', '|');
-                //throw new Exception("Expected expression after '|', got {$this->state} instead\n");
+                $this->syntaxError('expression', '\'|\'');
             }
             //echo "Found $identifier | $rightIdentifier\n";
             $output = new OrToken($identifier, $rightIdentifier);
@@ -169,8 +185,7 @@ class Parser
 
         if ($this->scan("\s*,\s*")) {
             if (!$this->getExpression($rightIdentifier)) {
-                $this->syntaxError('expression', ',');
-                //throw new Exception("Expected expression after ',', got {$this->state} instead \n");
+                $this->syntaxError('expression', '\',\'');
             }
             //echo "Found $identifier , $rightIdentifier\n";
             $output = new CommaToken($identifier, $rightIdentifier);
@@ -184,13 +199,11 @@ class Parser
     private function getTerminal(&$output)
     {
         if ($this->scan('"')) {
-            if (!$this->scan('[a-zA-Z0-9_]+', $terminal)) {
-                $this->syntaxError('terminal', '"');
-                //throw new Exception("Expected terminal after ' \" ', got {$this->state} instead\n");
+            if (!$this->scan('[^"]+', $terminal)) {
+                $this->syntaxError('terminal', '\'"\'');
             }
             if (!$this->scan('"')) {
-                $this->syntaxError('"', '"'.terminal[0]);
-                //throw new Exception("Expected ' \" ' after ' \"{$terminal[0]} ', got {$this->state} instead");
+                $this->syntaxError('\'"\'', '\'"'.$terminal[0].'\'');
             }
 
             $output = new TerminalToken($terminal[0]);
@@ -204,12 +217,10 @@ class Parser
     {
         if ($this->scan("\[\s*")) {
             if (!$this->getExpression($expression)) {
-                $this->syntaxError('expression', '[');
-                //throw new Exception("Expected expression after ' [ ', got {$this->state} instead");
+                $this->syntaxError('expression', '\'[\'');
             }
             if (!$this->scan("\s*\]")) {
-                $this->syntaxError(']', 'expression '.$expression);
-                //throw new Exception("Expected ' ] ' after expression $expression, got {$this->state} instead");
+                $this->syntaxError('\']\'', 'expression \''.$expression.'\'');
             }
 
             $output = new OptionalToken($expression);
@@ -223,12 +234,10 @@ class Parser
     {
         if ($this->scan("{\s*")) {
             if (!$this->getExpression($expression)) {
-                $this->syntaxError('expression', '{');
-                //throw new Exception("Expected expression after ' { ', got {$this->state} instead");
+                $this->syntaxError('expression', '\'{\'');
             }
             if (!$this->scan("\s*}")) {
-                $this->syntaxError('}', 'expression '.$expression);
-                //throw new Exception("Expected ' } ' after expression $expression, got {$this->state} instead");
+                $this->syntaxError('\'}\'', 'expression \''.$expression.'\'');
             }
 
             $output = new RepetitionToken($expression);
@@ -242,12 +251,10 @@ class Parser
     {
         if ($this->scan("\(\s*")) {
             if (!$this->getExpression($expression)) {
-                $this->syntaxError('expression', '(');
-                //throw new Exception("Expected expression after ' ( ', got {$this->state} instead");
+                $this->syntaxError('expression', '\'(\'');
             }
             if (!$this->scan("\s*\)")) {
-                $this->syntaxError(')', 'expression '.$expression);
-                //throw new Exception("Expected ' ) ' after expression $expression, got {$this->state} instead");
+                $this->syntaxError('\')\'', 'expression \''.$expression.'\'');
             }
 
             $output = new GroupingToken($expression);
@@ -285,8 +292,8 @@ class Parser
         return true;
     }
 
-    private function syntaxError($expectation, $after)
+    public function syntaxError($expectation, $after)
     {
-        throw new Exception("Expected ' {$expectation} ' after ' {$after} ', got {$this->state} instead\n");
+        throw new Exception("Expected {$expectation} after {$after}, got '{$this->state}' instead\n");
     }
 }
