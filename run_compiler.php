@@ -9,6 +9,7 @@ equation = variable, " = ", expression, ";";
 expression = sum | variable;
 
 @sum = expression, "+", expression;
+@doublesum = "sum:", sum, sum;
 
 variable = "x" | "y" | "z" | "a" | "b" | "c";
 EOS;

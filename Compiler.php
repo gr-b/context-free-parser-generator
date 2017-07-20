@@ -29,6 +29,9 @@ class Compiler
     /** @var  array $tokenClasses */
     private $tokenClasses;
 
+    /** @var array $ruleTable */
+    private $ruleTable; // Of the form: rulename => rule token
+
     public function __construct()
     {
     }
@@ -49,8 +52,60 @@ class Compiler
 
         //print_r($ast);
         //echo "Abstract Syntax Tree: ". self::printToken($ast)."\n";
-        $classTokens = $ast->collectClassRuleTokens();
-        echo self::printTokens($classTokens);
+        $this->ruleTable = $this->getRuleTable($ast);
+        $classRules = $this->getClassRules($ast);
+        echo self::printTokens($classRules);
+    }
+
+    private function printRuleTable()
+    {
+        foreach ($this->ruleTable as $name => $token) {
+            echo "'{$name}' => {$token}\n\n";
+        }
+    }
+
+    /**
+     * Consumes an EBNFToken
+     * Produces an array of rule tokens where isClass = true for each token
+     * @param EBNFToken $ebnf
+     * @throws Exception
+     * @return array
+     */
+    private function getClassRules(EBNFToken $ebnf)
+    {
+        $rules = $ebnf->getRules();
+
+        $ruleTable = array();
+        foreach ($rules as $rule) {
+            /** @var RuleToken $rule */
+            if ($rule->isClass()) {
+                $ruleTable[] = $rule;
+            }
+        }
+
+        return $ruleTable;
+    }
+
+    /**
+     * Consumes an EBNFToken
+     * Produces an associative array where the each key
+     * is the name of a rule in the EBNF
+     * @param EBNFToken $ebnf
+     * @throws Exception
+     * @return array
+     */
+    private function getRuleTable(EBNFToken $ebnf)
+    {
+        $rules = $ebnf->getRules();
+
+        $ruleTable = array();
+        foreach ($rules as $rule) {
+            /** @var RuleToken $rule */
+            $ruleName = $rule->getName();
+            $ruleTable[$ruleName] = $rule;
+        }
+
+        return $ruleTable;
     }
 
     /**
