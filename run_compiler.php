@@ -9,10 +9,18 @@ equation = variable, " = ", expression, ";";
 expression = sum | variable;
 
 @sum = expression, "+", expression;
-@doublesum = "sum:", sum, sum;
+product = expression, "*", expression;
 
-variable = "x" | "y" | "z" | "a" | "b" | "c";
+@variable = "x" | "y" | "z" | "a" | "b" | "c";
 EOS;
+
+$input = <<< EOS
+equation = variable, " = ", expression, ";";
+expression = sum | variable;
+
+@sum = expression, "+", expression;
+EOS;
+
 
 //$input = '@algebra = test;';
 

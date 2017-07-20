@@ -53,8 +53,42 @@ class Compiler
         //print_r($ast);
         //echo "Abstract Syntax Tree: ". self::printToken($ast)."\n";
         $this->ruleTable = $this->getRuleTable($ast);
+        //$this->printRuleTable(); exit;
         $classRules = $this->getClassRules($ast);
-        echo self::printTokens($classRules);
+        echo self::printTokens($this->ruleTable);
+
+        //$classTokenInputs = $this->getInputs($classRules);
+    }
+
+    /**
+     * Consumes a list of RuleTokens where isClass = true
+     * Produces an associative array where each key is the name of
+     * exactly one RuleToken and each value is an array specifying
+     * the types/inputs accepted by the corresponding RuleToken.
+     * @param RuleToken[]
+     * isClass must be true for all tokens in the array
+     * @return array
+     */
+    private function getInputs(array $ruleTokens)
+    {
+        $inputs = array();
+        foreach ($ruleTokens as $ruleToken) {
+            $inputs = array_merge($inputs, $this->getInput($ruleToken));
+        }
+        return $inputs;
+    }
+
+    /**
+     * Consumes a RuleToken where class = true.
+     * Produces an associative array with one association:
+     * the name of the ruleToken => and array of tokens or strings
+     * designating what types the future ClassToken will take
+     * as input.
+     * @param $ruleToken
+     */
+    private function getInput($ruleToken)
+    {
+
     }
 
     private function printRuleTable()

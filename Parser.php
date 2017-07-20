@@ -163,9 +163,13 @@ class Parser
 
     }
 
+    // This function uses a hack due to poor design
+    // There was a problem where the second half of a binary
+    // expression would always be interpreted as a string.
+    // The parts labeled '// Hack // End' fix this
     private function getBinaryExpression(&$output)
     {
-        if (!$this->getIdentifier($identifier) && !$this->getTerminal($identifier)) {
+        if (!$this->getTerminal($identifier) && !$this->getIdentifier($identifier)) {
             return false;
         }
 
@@ -173,9 +177,11 @@ class Parser
             if (!$this->getExpression($rightIdentifier)) {
                 $this->syntaxError('expression', '\'|\'');
             }
-            //echo "Found $identifier | $rightIdentifier\n";
-            // hack
+
+            // Hack
             $identifier = (is_string($identifier) ? new IdentifierToken($identifier) : $identifier);
+            // End
+
             $output = new OrToken($identifier, $rightIdentifier);
             return true;
         }
@@ -184,12 +190,20 @@ class Parser
             if (!$this->getExpression($rightIdentifier)) {
                 $this->syntaxError('expression', '\',\'');
             }
-            //echo "Found $identifier , $rightIdentifier\n";
+
+            // Hack
             $identifier = (is_string($identifier) ? new IdentifierToken($identifier) : $identifier);
+            // End
+
             $output = new CommaToken($identifier, $rightIdentifier);
             return true;
         }
 
+        // Hack
+        if (!is_string($identifier)) {
+            $output = $identifier;
+            return true;
+        } // end
         $output = new IdentifierToken($identifier);
         return true;
     }

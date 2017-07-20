@@ -15,6 +15,11 @@ class OrToken extends Token
     /** @var $right Token */
     private $right;
 
+    /**
+     * OrToken constructor.
+     * @param Token $left
+     * @param Token $right
+     */
     public function __construct($left, $right)
     {
         parent::__construct(Token::TYPE_OR);
