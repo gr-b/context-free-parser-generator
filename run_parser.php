@@ -29,7 +29,7 @@ expression = sum | variable;
 
 @sum = expression, "+", expression;
 
-variable = "x" | "y" | "z" | "a" | "b" | "c";
+variable = "x" | "y" | "z";
 EOS;
 
 //$input = '@rule = test;';

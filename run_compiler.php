@@ -19,6 +19,8 @@ equation = variable, " = ", expression, ";";
 expression = sum | variable;
 
 @sum = expression, "+", expression;
+
+variable = "x" | "y" | "z";
 EOS;
 
 

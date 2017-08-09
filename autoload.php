@@ -10,7 +10,7 @@ spl_autoload_register(
         }
 
         $relativeClassName = substr($class, $namespacePrefixLength);
-        $filePath = dirname(dirname(__DIR__)) . '/Projects/parser-generator/' . strtr($relativeClassName, '\\', '/') . '.php';
+        $filePath = dirname(dirname(__DIR__)) . '/projects/parser-generator/' . strtr($relativeClassName, '\\', '/') . '.php';
         //echo "Filepath:".$filePath."\n";
         if (is_file($filePath)) {
             include $filePath;

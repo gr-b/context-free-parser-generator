@@ -47,17 +47,17 @@ class Compiler
     {
         // 1. Generate autoloader from template
         $projectName = self::getParserName($ast);
-        $this->generator = new Generator($projectName);
-        //$this->generator->generateAutoloader();
 
-        //print_r($ast);
-        //echo "Abstract Syntax Tree: ". self::printToken($ast)."\n";
+
         $this->ruleTable = $this->getRuleTable($ast);
-        //$this->printRuleTable(); exit;
-        $classRules = $this->getClassRules($ast);
-        echo self::printTokens($this->ruleTable);
+        echo "Rule table:\n";
+        $this->printRuleTable();
 
-        //$classTokenInputs = $this->getInputs($classRules);
+        echo "Class rules:\n";
+        $classRules = $this->getClassRules($ast);
+        echo self::printTokens($classRules);
+
+        $classTokenInputs = $this->getInputs($classRules);
     }
 
     /**
@@ -109,15 +109,15 @@ class Compiler
     {
         $rules = $ebnf->getRules();
 
-        $ruleTable = array();
+        $classRules = array();
         foreach ($rules as $rule) {
             /** @var RuleToken $rule */
             if ($rule->isClass()) {
-                $ruleTable[] = $rule;
+                $classRules[] = $rule;
             }
         }
 
-        return $ruleTable;
+        return $classRules;
     }
 
     /**
@@ -222,7 +222,7 @@ class Compiler
     private function getParserName(EBNFToken $ast)
     {
         $rules = $ast->getRules();
-        $first = array_pop($rules);
+        $first = array_shift($rules);
         if (!isset($first)) {
             throw new Exception("Compiler: could not find project name in first production rule.\n");
         }
