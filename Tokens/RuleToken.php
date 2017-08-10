@@ -26,10 +26,9 @@ class RuleToken extends Token
         $this->isClass = $isClass;
     }
 
-    public function __toString()
+    public function getStatements(array &$output)
     {
-        return ($this->isClass ? '@' : '') .
-            $this->ruleName." = ".$this->expression->__toString(). ";\n";
+
     }
 
     public function getName()
@@ -45,15 +44,5 @@ class RuleToken extends Token
     public function isClass()
     {
         return $this->isClass;
-    }
-
-    public function collectClassRuleTokens()
-    {
-        $tokens  = $this->expression->collectClassRuleTokens();
-
-        if ($this->isClass) {
-            $tokens[] = $this;
-        }
-        return $tokens;
     }
 }

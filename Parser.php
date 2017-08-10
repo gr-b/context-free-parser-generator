@@ -145,7 +145,7 @@ class Parser
         }
 
         if (!$this->scan("\s*;\s*")) {
-            $this->syntaxError('\';\'', 'expression \''.$expression.'\'');
+            $this->syntaxError('\';\'', 'expression \''.RenderToken::syntax($expression).'\'');
         }
 
 
@@ -232,7 +232,7 @@ class Parser
                 $this->syntaxError('expression', '\'[\'');
             }
             if (!$this->scan("\s*\]")) {
-                $this->syntaxError('\']\'', 'expression \''.$expression.'\'');
+                $this->syntaxError('\']\'', 'expression \''.RenderToken::syntax($expression).'\'');
             }
 
             $output = new OptionalToken($expression);
@@ -249,7 +249,7 @@ class Parser
                 $this->syntaxError('expression', '\'{\'');
             }
             if (!$this->scan("\s*}")) {
-                $this->syntaxError('\'}\'', 'expression \''.$expression.'\'');
+                $this->syntaxError('\'}\'', 'expression \''.RenderToken::syntax($expression).'\'');
             }
 
             $output = new RepetitionToken($expression);
@@ -266,7 +266,7 @@ class Parser
                 $this->syntaxError('expression', '\'(\'');
             }
             if (!$this->scan("\s*\)")) {
-                $this->syntaxError('\')\'', 'expression \''.$expression.'\'');
+                $this->syntaxError('\')\'', 'expression \''.RenderToken::syntax($expression).'\'');
             }
 
             $output = new GroupingToken($expression);

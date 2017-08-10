@@ -18,18 +18,13 @@ class OptionalToken extends Token
         $this->expression = $expression;
     }
 
+    public function getStatements(array &$output)
+    {
+
+    }
+
     public function getExpression()
     {
         return $this->expression;
-    }
-
-    public function __toString()
-    {
-        return "[ ".$this->expression." ]";
-    }
-
-    public function collectClassRuleTokens()
-    {
-        return $this->expression->collectClassRuleTokens();
     }
 }

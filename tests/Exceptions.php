@@ -2,7 +2,7 @@
 
 namespace ParserGenerator;
 
-require TESTPHP_TESTS_DIRECTORY.'/autoload.php';
+require TESTPHP .'/autoload.php';
 use Exception;
 
 $input = null;
@@ -10,7 +10,7 @@ $input = null;
 // Test
 $parser = new Parser();
 $output = $parser->parse($input);
-$output = $output->__toString();
+$output = RenderToken::syntax($output);
 
 
 // Input

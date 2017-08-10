@@ -9,9 +9,7 @@ use ParserGenerator\Tokens\OrToken;
 use ParserGenerator\Tokens\RuleToken;
 use ParserGenerator\Tokens\TerminalToken;
 
-require TESTPHP_TESTS_DIRECTORY.'/autoload.php';
-
-
+require TESTPHP.'/autoload.php';
 
 
 $input = null;
@@ -19,7 +17,7 @@ $input = null;
 // Test
 $parser = new Parser();
 $output = $parser->parse($input);
-$output = $output->__toString();
+$output = RenderToken::syntax($output);
 
 
 // Input

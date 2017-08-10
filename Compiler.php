@@ -9,10 +9,13 @@ use ParserGenerator\Tokens\OrToken;
 use ParserGenerator\Tokens\CommaToken;
 use ParserGenerator\Tokens\IdentifierToken;
 use ParserGenerator\Tokens\TerminalToken;
-use ParserGenerator\Tokens\ClassRuleToken;
 use ParserGenerator\Tokens\OptionalToken;
 use ParserGenerator\Tokens\RepetitionToken;
 use ParserGenerator\Tokens\GroupingToken;
+
+use ParserGenerator\Intermediate\IntermediateToken;
+use ParserGenerator\Intermediate\FunctionToken;
+use ParserGenerator\Intermediate\ArgumentToken;
 use Exception;
 
 /**
@@ -53,42 +56,37 @@ class Compiler
         echo "Rule table:\n";
         $this->printRuleTable();
 
-        echo "Class rules:\n";
+        //echo "Class rules:\n";
         $classRules = $this->getClassRules($ast);
         echo self::printTokens($classRules);
 
-        $classTokenInputs = $this->getInputs($classRules);
+        //echo "Generating functions...\n\n";
+        // Generate a function for each rule
+        echo "Generating function for first rule:\n";
+
+        $rules = $ast->getRules();
+        $first = array_shift($rules);
+
+        $firstRuleFunction = $this->generateGetRule($first);
+        echo "Generated function:\n";
+        echo $firstRuleFunction->getSyntax();
+
     }
 
-    /**
-     * Consumes a list of RuleTokens where isClass = true
-     * Produces an associative array where each key is the name of
-     * exactly one RuleToken and each value is an array specifying
-     * the types/inputs accepted by the corresponding RuleToken.
-     * @param RuleToken[]
-     * isClass must be true for all tokens in the array
-     * @return array
-     */
-    private function getInputs(array $ruleTokens)
+    private function generateGetRule(RuleToken $rule)
     {
-        $inputs = array();
-        foreach ($ruleTokens as $ruleToken) {
-            $inputs = array_merge($inputs, $this->getInput($ruleToken));
-        }
-        return $inputs;
-    }
+        $name = 'get_'.$rule->getName();
+        $visbility = FunctionToken::VISIBILITY_PRIVATE;
+        $function =  new FunctionToken($name, $visbility);
 
-    /**
-     * Consumes a RuleToken where class = true.
-     * Produces an associative array with one association:
-     * the name of the ruleToken => and array of tokens or strings
-     * designating what types the future ClassToken will take
-     * as input.
-     * @param $ruleToken
-     */
-    private function getInput($ruleToken)
-    {
+        $expression = $rule->getExpression();
+        $statements = array();
+        $expression->getStatements($statements);
 
+        $function->setStatements($statements);
+        $function->addArgument(new ArgumentToken('output', true));
+
+        return $function;
     }
 
     private function printRuleTable()
@@ -150,73 +148,11 @@ class Compiler
     {
         $string = "[";
         foreach ($tokens as $token) {
-            $string .= self::printToken($token).", ";
+            $string .= RenderToken::semantics($token).", ";
         }
         $string .= "]";
 
         return $string;
-    }
-
-    public static function printToken(Token $token)
-    {
-        $type = $token->getType();
-
-        switch ($type) {
-            case Token::TYPE_EBNF:
-                /** @var EBNFToken $token */
-                $guts = array_map(array('self', 'printToken'), $token->getRules());
-                $guts = implode(', ', $guts);
-                return "ebnf(".$guts.")";
-
-            case Token::TYPE_RULE:
-                /** @var RuleToken $token */
-                return "rule(".($token->isClass() ? '@' : '') .
-                    $token->getName().", ".self::printToken($token->getExpression()). ";\n)";
-
-            case Token::TYPE_OR:
-                /** @var OrToken $token */
-                return "or(".self::printToken($token->getLeft()).' | '. self::printToken($token->getRight()).")";
-
-            case Token::TYPE_COMMA:
-                /** @var CommaToken $token */
-                return "comma(".self::printToken($token->getLeft()).' , '. self::printToken($token->getRight()).")";
-
-            case Token::TYPE_GROUPING:
-                /** @var GroupingToken $token */
-                return "grouping(".self::printToken($token->getExpression()).")";
-
-            case Token::TYPE_REPETITION:
-                /** @var RepetitionToken $token */
-                return "repetition(".self::printToken($token->getExpression()).")";
-
-            case Token::TYPE_OPTIONAL:
-                /** @var OptionalToken $token */
-                return "optional(".self::printToken($token->getExpression()).")";
-
-            case Token::TYPE_TERMINAL:
-                /** @var TerminalToken $token */
-                return "terminal(\"".$token->getTerminal()."\")";
-
-            case Token::TYPE_IDENTIFIER:
-                /** @var IdentifierToken $token */
-                return "identifier('".$token->getIdentifier()."')";
-
-            default:
-                throw new Exception("Abstract syntax tree is invalid!");
-        }
-    }
-
-    /**
-     * Computes the inputs necessary to create each token class
-     * defined in the parser by TokenTokens.
-     * Puts this information in $this->tokenClasses.
-     * @param Token $ast
-     * The token whose class inputs we will create
-     * NOTE: Not necessarily a ClassRuleToken object.
-     */
-    private function computeTokenClasses(Token $ast)
-    {
-
     }
 
     private function getParserName(EBNFToken $ast)

@@ -18,18 +18,13 @@ class TerminalToken extends Token
         $this->terminal = $terminal;
     }
 
-    public function __toString()
+    public function getStatements(array &$output)
     {
-        return '"'.$this->terminal.'"';
+
     }
 
     public function getTerminal()
     {
         return $this->terminal;
-    }
-
-    public function collectClassRuleTokens()
-    {
-        return array();
     }
 }

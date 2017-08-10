@@ -27,6 +27,11 @@ class OrToken extends Token
         $this->right = $right;
     }
 
+    public function getStatements(array &$output)
+    {
+
+    }
+
     public function getLeft()
     {
         return $this->left;
@@ -35,18 +40,5 @@ class OrToken extends Token
     public function getRight()
     {
         return $this->right;
-    }
-
-    public function __toString()
-    {
-        return $this->left." | ".$this->right;
-    }
-
-    public function collectClassRuleTokens()
-    {
-        return array_merge(
-            $this->left->collectClassRuleTokens(),
-            $this->right->collectClassRuleTokens()
-        );
     }
 }

@@ -18,28 +18,13 @@ class EBNFToken extends Token
         $this->rules = $rules;
     }
 
-    public function __toString()
+    public function getStatements(array &$output)
     {
-        $EBNF = '';
-        foreach ($this->rules as $rule) {
-            $EBNF .= $rule->__toString();
-        }
 
-        return $EBNF;
     }
 
     public function getRules()
     {
         return $this->rules;
-    }
-
-    public function collectClassRuleTokens()
-    {
-        $results = array();
-        foreach ($this->rules as $rule) {
-            $results = array_merge($results, $rule->collectClassRuleTokens());
-        }
-
-        return $results;
     }
 }

@@ -18,18 +18,13 @@ class IdentifierToken extends Token
         $this->identifier = $identifier;
     }
 
-    public function __toString()
+    public function getStatements(array &$output)
     {
-        return ''.$this->identifier;
+
     }
 
     public function getIdentifier()
     {
         return $this->identifier;
-    }
-
-    public function collectClassRuleTokens()
-    {
-        return array();
     }
 }

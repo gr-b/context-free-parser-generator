@@ -39,17 +39,9 @@ abstract class Token
     }
 
     /**
-     * @return string
+     * Adds statements derived from the current class to the
+     * given output array.
+     * @param array $output
      */
-    abstract public function __toString();
-
-    /**
-     * Returns an array of Class RuleTokens in this tree
-     *
-     * Performs a depth first search to find TokenTokens.
-     * Returns a list of RuleToken objects where Token->isClass is true.
-     * @return RuleToken[]
-     * These RuleTokens have $isClass = true
-     */
-    abstract public function collectClassRuleTokens();
+    abstract public function getStatements(array &$output);
 }
