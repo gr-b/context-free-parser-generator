@@ -2,7 +2,7 @@
 
 namespace ParserGenerator\Intermediate;
 
-class FunctionToken extends IntermediateToken
+class FunctionDeclaration extends IntermediateToken
 {
     const VISIBILITY_PUBLIC = 0;
     const VISIBILITY_PRIVATE = 1;
@@ -21,7 +21,7 @@ class FunctionToken extends IntermediateToken
 
     public function __construct($name, $visibility)
     {
-        parent::__construct(IntermediateToken::FUNCTION_TOKEN);
+        parent::__construct(IntermediateToken::FUNCTION_DECLARATION);
         $this->name = $name;
         $this->visibility = $visibility;
         $this->statements = array();
@@ -44,10 +44,10 @@ class FunctionToken extends IntermediateToken
                 $syntax .= ', ';
             }
         }
-        $syntax .= ")\n{\n\t";
+        $syntax .= ")\n{\n";
 
         foreach ($this->statements as $statement) {
-            $syntax .= $statement->getSyntax();
+            $syntax .= $statement->getSyntax(1);
         }
 
         $syntax .= "\n}";
@@ -71,7 +71,7 @@ class FunctionToken extends IntermediateToken
         $this->statements = $statements;
     }
 
-    public function addStatement(Statement $statement)
+    public function addStatement(StatementToken $statement)
     {
         $this->statements[] = $statement;
     }

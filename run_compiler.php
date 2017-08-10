@@ -23,6 +23,12 @@ expression = sum | variable;
 variable = "x" | "y" | "z";
 EOS;
 
+$input = <<< EOS
+equation = variable;
+
+variable = "x" | "y" | "z";
+EOS;
+
 
 //$input = '@algebra = test;';
 

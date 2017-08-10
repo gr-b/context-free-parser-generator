@@ -14,7 +14,7 @@ use ParserGenerator\Tokens\RepetitionToken;
 use ParserGenerator\Tokens\GroupingToken;
 
 use ParserGenerator\Intermediate\IntermediateToken;
-use ParserGenerator\Intermediate\FunctionToken;
+use ParserGenerator\Intermediate\FunctionDeclaration;
 use ParserGenerator\Intermediate\ArgumentToken;
 use Exception;
 
@@ -26,18 +26,8 @@ use Exception;
 
 class Compiler
 {
-    /** @var Generator $generator */
-    private $generator;
-
-    /** @var  array $tokenClasses */
-    private $tokenClasses;
-
     /** @var array $ruleTable */
     private $ruleTable; // Of the form: rulename => rule token
-
-    public function __construct()
-    {
-    }
 
     /**
      * Compiles the given abstract syntax tree from the parser into a
@@ -60,9 +50,6 @@ class Compiler
         $classRules = $this->getClassRules($ast);
         echo self::printTokens($classRules);
 
-        //echo "Generating functions...\n\n";
-        // Generate a function for each rule
-        echo "Generating function for first rule:\n";
 
         $rules = $ast->getRules();
         $first = array_shift($rules);
@@ -76,8 +63,8 @@ class Compiler
     private function generateGetRule(RuleToken $rule)
     {
         $name = 'get_'.$rule->getName();
-        $visbility = FunctionToken::VISIBILITY_PRIVATE;
-        $function =  new FunctionToken($name, $visbility);
+        $visbility = FunctionDeclaration::VISIBILITY_PRIVATE;
+        $function =  new FunctionDeclaration($name, $visbility);
 
         $expression = $rule->getExpression();
         $statements = array();
@@ -92,7 +79,7 @@ class Compiler
     private function printRuleTable()
     {
         foreach ($this->ruleTable as $name => $token) {
-            echo "'{$name}' => {$token}\n\n";
+            echo "'{$name}' => ". RenderToken::syntax($token) ."\n\n";
         }
     }
 
@@ -148,9 +135,9 @@ class Compiler
     {
         $string = "[";
         foreach ($tokens as $token) {
-            $string .= RenderToken::semantics($token).", ";
+            $string .= RenderToken::syntax($token).", ";
         }
-        $string .= "]";
+        $string .= "]\n";
 
         return $string;
     }
