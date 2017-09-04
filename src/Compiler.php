@@ -55,9 +55,11 @@ class Compiler
         $first = array_shift($rules);
 
         $firstRuleFunction = $this->generateGetRule($first);
-        echo "Generated function:\n";
-        echo $firstRuleFunction->getSyntax();
-
+        echo "Generated functions:\n";
+        echo $firstRuleFunction->getSyntax()."\n";
+        $second = array_shift($rules);
+        $secondRuleFunction = $this->generateGetRule($second);
+        echo $secondRuleFunction->getSyntax()."\n";
     }
 
     private function generateGetRule(RuleToken $rule)

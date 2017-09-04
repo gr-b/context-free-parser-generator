@@ -40,7 +40,7 @@ class Generator
      */
     public function generateAutoloader()
     {
-        $path = __DIR__.'/templates/autoloadTemplate.php';
+        $path = __DIR__ . '/templates/autoloadTemplate.php';
         $template = Filesystem::read($path);
 
         if (!isset($template)) {
