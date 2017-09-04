@@ -11,6 +11,7 @@ abstract class IntermediateToken
     const CALL_EXPRESSION = 4;
     const RETURN_STATEMENT = 5;
     const BOOLEAN_VALUE = 6;
+    const OR_EXPRESSION = 7;
 
     /** @var integer */
     private $type;

@@ -1,6 +1,11 @@
 <?php
 
 namespace ParserGenerator\Tokens;
+use ParserGenerator\Intermediate\CallExpression;
+use ParserGenerator\Intermediate\IfStatement;
+use ParserGenerator\Intermediate\OrExpression;
+use ParserGenerator\Intermediate\ReturnStatement;
+use ParserGenerator\Intermediate\ArgumentToken;
 
 /**
  * Class OrToken
@@ -29,7 +34,22 @@ class OrToken extends Token
 
     public function getStatements(array &$output)
     {
-
+        /*$return = new ReturnStatement(
+            new OrExpression(
+                new CallExpression(
+                    array('this', $leftFunctionName),
+                    array(
+                        new ArgumentToken('output', true)
+                    )
+                ),
+                new CallExpression(
+                    array('this', $rightFunctionName),
+                    array(
+                        new ArgumentToken('output', true)
+                    )
+                )
+            )
+        );*/
     }
 
     public function getLeft()
