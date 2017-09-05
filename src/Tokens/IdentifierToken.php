@@ -24,7 +24,12 @@ class IdentifierToken extends Token
         $this->identifier = $identifier;
     }
 
-    public function getStatements(array &$output)
+    public function generateGetFunction(array &$functions)
+    {
+
+    }
+
+    public function getStatements(array &$output, array &$function)
     {
         $ifToken = new IfStatement();
 

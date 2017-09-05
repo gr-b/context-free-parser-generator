@@ -42,6 +42,16 @@ abstract class Token
      * Adds statements derived from the current class to the
      * given output array.
      * @param array $output
+     * @param array $functions
+     * Functions that have previously been defined during compilation
      */
-    abstract public function getStatements(array &$output);
+    abstract public function getStatements(array &$output, array &$functions);
+
+    /**
+     * Generates a get function for the current Token and puts the semantics in the given functions array.
+     * @param array $functions
+     * @return string
+     * The name of the function generated
+     */
+    abstract public function generateGetFunction(array &$functions);
 }

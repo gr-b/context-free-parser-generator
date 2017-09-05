@@ -18,7 +18,12 @@ class TerminalToken extends Token
         $this->terminal = $terminal;
     }
 
-    public function getStatements(array &$output)
+    public function generateGetFunction(array &$functions)
+    {
+        // TODO: Implement generateGetFunction() method.
+    }
+
+    public function getStatements(array &$output, array &$functions)
     {
 
     }

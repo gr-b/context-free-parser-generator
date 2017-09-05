@@ -32,24 +32,29 @@ class OrToken extends Token
         $this->right = $right;
     }
 
-    public function getStatements(array &$output)
+    public function generateGetFunction(array &$functions)
     {
-        /*$return = new ReturnStatement(
+        // TODO: Implement generateGetFunction() method.
+    }
+
+    public function getStatements(array &$output, array &$functions)
+    {
+        $return = new ReturnStatement(
             new OrExpression(
                 new CallExpression(
-                    array('this', $leftFunctionName),
+                    array('this', $this->left),
                     array(
                         new ArgumentToken('output', true)
                     )
                 ),
                 new CallExpression(
-                    array('this', $rightFunctionName),
+                    array('this', $this->right),
                     array(
                         new ArgumentToken('output', true)
                     )
                 )
             )
-        );*/
+        );
     }
 
     public function getLeft()

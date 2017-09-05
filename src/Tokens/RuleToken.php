@@ -2,6 +2,9 @@
 
 namespace ParserGenerator\Tokens;
 
+use ParserGenerator\Intermediate\FunctionDeclaration;
+use ParserGenerator\Intermediate\ArgumentToken;
+
 /**
  * Class RuleToken
  * @author Griffin Bishop <grbishop@wpi.edu>
@@ -26,7 +29,23 @@ class RuleToken extends Token
         $this->isClass = $isClass;
     }
 
-    public function getStatements(array &$output)
+    public function generateGetFunction(array &$functions)
+    {
+        $name = 'get_'.$this->getName();
+        $visbility = FunctionDeclaration::VISIBILITY_PRIVATE;
+        $function =  new FunctionDeclaration($name, $visbility);
+
+        $expression = $this->getExpression();
+        $statements = array();
+        $expression->getStatements($statements, $functions);
+
+        $function->setStatements($statements);
+        $function->addArgument(new ArgumentToken('output', true));
+
+        return $function;
+    }
+
+    public function getStatements(array &$output, array &$functions)
     {
 
     }

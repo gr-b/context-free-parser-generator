@@ -57,26 +57,14 @@ class Compiler
 
         $functions = array();
         foreach ($rules as $rule) {
-            $function = $this->generateGetRule($rule);
-            $functions[] = $function->getSyntax();
+            $rule->generateGetFunction($functions);
+        }
+
+        $syntax = "";
+        foreach ($functions as $function) {
+            $syntax .= $function->getSyntax();
             echo $function->getSyntax()."\n";
         }
-    }
-
-    private function generateGetRule(RuleToken $rule)
-    {
-        $name = 'get_'.$rule->getName();
-        $visbility = FunctionDeclaration::VISIBILITY_PRIVATE;
-        $function =  new FunctionDeclaration($name, $visbility);
-
-        $expression = $rule->getExpression();
-        $statements = array();
-        $expression->getStatements($statements);
-
-        $function->setStatements($statements);
-        $function->addArgument(new ArgumentToken('output', true));
-
-        return $function;
     }
 
     private function printRuleTable()
